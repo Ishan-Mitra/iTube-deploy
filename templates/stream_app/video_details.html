@@ -1,0 +1,66 @@
+{% extends 'navbar.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %} Home {% endblock %}
+{% block css_block %}
+<head>
+<link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet" />
+</head>
+<style>
+    .col-sm-6 {
+        width: auto;
+        padding: 20px;
+    }
+    
+</style>
+{% endblock %}
+{% block body_block %}
+
+
+
+<div class="video-details">
+    <h3>{{video.video_title}}</h3>
+    <video src="/media/{{video.video_content}}" video width="1000" height="500" controls width="750px" autoplay = True > </video> <br>
+    {% if user.profile.profile_picture %}
+    <img src="/media/{{video.user.profile.profile_picture}}" alt="" width="23px" height="23px"
+        class="rounded-circle">{{video.user.username}} <br>
+    {% else %}
+    <img src= "/static/images/unisex_avatar.jpg" alt="" width="23px" height="23px"
+        class="rounded-circle"> {{video.user.username}} <br>
+        {% endif %}
+    <small class="text-muted"><strong>Publish date: </strong>{{video.publish_date}}</small><br>
+    <small class="text-muted"><strong>Updated on: </strong>{{video.update_date}}</small>
+
+</div><hr>
+<h1>Description</h1>
+{{video.video_description}}
+<hr>
+{{video.video_comment.count}} Comments
+<div class="comments">
+    <div class="row">
+        <div class="col-sm-5 py-5">
+            <h4>Comments:</h4>
+            {% for comment in video.video_comment.all %}
+            {% if user.profile.profile_picture %}
+            <p><img src="/media/{{comment.user.profile.profile_picture}}" alt="" width="23px" height="23px"
+                class="rounded-circle"><strong>{{comment.user.username}}</strong> &nbsp; {{comment}}</p>
+            {% else %}
+            <p><img src="/static/images/unisex_avatar.jpg" alt="" width="23px" height="23px"
+                class="rounded-circle"><strong>{{comment.user.username}}</strong> &nbsp; {{comment}}</p>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div class="col-sm-7 py-5">
+            {% if user.is_authenticated %}
+            <form action="" method="POST">
+                {{form|crispy}}
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-sm">Comment</button>
+            {% else %}
+            Sign in in order to comment on this video
+            {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
