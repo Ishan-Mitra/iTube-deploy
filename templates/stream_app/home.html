@@ -12,7 +12,6 @@
 {% block body_block %}
 
 <h3>Welcome to iTube</h3>
-{% if search %}
 {% for video in result %}
 <p><a href="{% url 'stream_app:video_details' slug=video.slug %}">{{video.video_title}}{{video.video}}</a></p>
 {% endfor %}
@@ -35,5 +34,4 @@
         {% endfor %}
     </div>
 </div>
-{% endif %}
 {% endblock %}
